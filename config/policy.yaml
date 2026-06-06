@@ -1,0 +1,75 @@
+# 🛡️ Hermes 铠甲 — Tirith 策略文件
+# 顶层宪法: 绝对安全 · 损失最小 · 利益最大
+# 生效位置: ~/.config/tirith/policy.yaml
+
+# === 核心策略：损失最小化 ===
+fail_mode: closed           # 引擎出错时拦截而非放行（宪法第二条）
+allow_bypass_env: false     # 禁止绕过，无例外（宪法第一条）
+
+# === 白名单：绝对安全边界 ===
+# 只有明确定义为可信的源才允许本地直连
+allowlist:
+  # 包管理/代码源（日常工作必需）
+  - "pypi.org"
+  - "files.pythonhosted.org"
+  - "github.com"
+  - "raw.githubusercontent.com"
+  - "npmjs.org"
+  - "registry.npmjs.org"
+  - "brew.sh"
+  - "docker.com"
+  - "docker.io"
+
+  # 日常访问的技术社区（你明确说的）
+  - "csdn.net"
+  - "*.csdn.net"
+  - "juejin.cn"
+  - "*.juejin.cn"
+  - "zhihu.com"
+  - "*.zhihu.com"
+  - "xiaohongshu.com"
+  - "*.xiaohongshu.com"
+  - "youtube.com"
+  - "*.youtube.com"
+
+  # 学习与工具
+  - "docs.python.org"
+  - "docs.dify.ai"
+
+# === 黑名单：绝对禁止 ===
+# 利益原则：对你无益的域，直接拦截
+blocklist:
+  # 免费/可疑顶级域（垃圾站点高发区）
+  - "*.xyz"
+  - "*.top"
+  - "*.gq"
+  - "*.ml"
+  - "*.cf"
+  - "*.tk"
+  - "*.icu"
+
+  # 广告追踪
+  - "*.doubleclick.net"
+  - "*.googleadservices.com"
+
+# === 严重级别覆盖：按宪法三原则调整 ===
+severity_overrides:
+  # —— 宪法第一条：绝对安全，这些必须硬拦截 ——
+  pipe_to_interpreter: CRITICAL        # curl | bash 绝不能放
+  obfuscated_payload: CRITICAL         # 混淆载荷
+  base64_decode_execute: CRITICAL      # base64 解码执行
+  data_exfiltration: CRITICAL          # 往外发数据
+  credential_detection: CRITICAL       # 凭证泄露
+  insecure_transport: CRITICAL         # 不安全传输（http 裸连）
+
+  # —— 宪法第二条：损失最小，这些要警惕 ——
+  shortened_url: HIGH                  # 短链接，看不透去向
+  non_ascii_hostname: HIGH             # 非ASCII域名，疑似钓鱼
+  config_injection: HIGH               # 配置文件被注入
+
+  # —— 宪法第三条：利益最大，别让规则干扰正常工作 ——
+  apt_install: LOW                     # apt 安装，白名单里的源没问题
+  brew_install: LOW                    # brew 安装同理
+
+  # 允许域名中包含 "web3"、"crypto" 等内容，不做过度拦截
+  web3_domain: LOW
