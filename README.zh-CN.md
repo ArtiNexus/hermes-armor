@@ -2,7 +2,7 @@
 
 **给 Hermes Agent 装上安全底座 — 从哲学出发，用代码落地。**
 
-<img src="assets/logo.jpeg" alt="Hermes 铠甲" width="100%">
+<img src="assets/logo.png" alt="Hermes 铠甲" width="100%">
 
 一个完整的安全增强套件，让 Hermes Agent：
 - **看得懂** — 操作前用大白话解释它在做什么
